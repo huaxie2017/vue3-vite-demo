@@ -15,10 +15,36 @@
       </div>
     </div>
     <div class="drapBox">
-      <div v-for="component in componentArr">
-        <component :is="component" />
+      <div
+        v-for="(component, index) in componentArr"
+        @click="handleClick(index)"
+      >
+        <component
+          :is="component"
+          :attrObj="attrObjList[index]"
+          @updateAttr="updateAttr"
+          @updateValue="updateValue"
+        />
       </div>
     </div>
+    <!-- <div class="setBox">
+      <template v-if="Object.keys(styleObjItem).length > 0">
+        <div v-for="(key, index) in Object.keys(styleObjItem)" :key="index">
+          <el-form label-width="120px">
+            <el-form-item :label="`${styleObjItem[key].text}：`">
+              <el-input
+                v-model="styleObjItem[key].value"
+                @input="
+                  (ev) => {
+                    updateAttr(ev, key);
+                  }
+                "
+              />
+            </el-form-item>
+          </el-form>
+        </div>
+      </template>
+    </div> -->
   </div>
 </template>
 
@@ -35,6 +61,11 @@ const componentNameList = reactive<Array<String>>([]);
 componentList.forEach((component) => {
   componentNameList.push(component.name);
 });
+const currentIndex = ref(0);
+
+const attrObjList = reactive([]);
+
+const styleObjItem = reactive({});
 
 const componentArr = reactive<Array<String>>([]);
 
@@ -53,9 +84,22 @@ const dragend = (ev: DragEvent, value: any) => {
   let num4 = ev.pageY < pageY.value;
   if (num1 && num2 && num3 && num4) {
     componentArr.push(value);
+    attrObjList.push({ value: "", styleObj: {}, show: false });
   } else {
     console.log("超出边界");
   }
+};
+
+const handleClick = (index: number) => {
+  currentIndex.value = index;
+};
+
+const updateAttr = (payload) => {
+  Object.assign(attrObjList[currentIndex.value].styleObj, payload);
+};
+
+const updateValue = (value) => {
+  attrObjList[currentIndex.value].value = value;
 };
 
 onMounted(() => {
@@ -87,6 +131,9 @@ onMounted(() => {
     flex: 1;
     text-align: left;
     height: 500px;
+  }
+  .setBox {
+    width: 300px;
   }
 }
 </style>
