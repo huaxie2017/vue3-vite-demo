@@ -3,8 +3,8 @@
     <div class="content_flex">
       <p>数字输入框</p>
       <el-input
-        :placeholder="attrObj.styleObj.placeholderValue"
-        :style="{ fontSize: attrObj.styleObj.fontSize + 'px' }"
+        :placeholder="attrObj?.styleObj.placeholderValue"
+        :style="{ fontSize: attrObj?.styleObj.fontSize + 'px' }"
         @input="updateValue"
         v-model="modelValue"
         type="number"
@@ -23,20 +23,24 @@ export default {
 </script>
 <script lang="ts" setup>
 import { defineProps, PropType, ref, onMounted, watch, defineEmits } from "vue";
-import componentStyle from "./common/componentStyle";
+import componentStyle from "./common/componentStyle.vue";
 components: {
   componentStyle;
 }
-interface propsObj {
-  styleObj?: Object;
+type styleObj = {
+  placeholderValue: string
+  fontSize: string
 }
-const props = defineProps({
-  attrObj: Object as PropType<propsObj>,
-});
+interface propsObj {
+  value: string
+  show: Boolean
+  styleObj: styleObj
+}
+const props = defineProps<{attrObj: propsObj}>()
 const modelValue = ref("");
 
 const emit = defineEmits(["updateAttr", "updateValue"]);
-const updateAttr = (form) => {
+const updateAttr = (form: any) => {
   emit("updateAttr", form);
 };
 
@@ -46,13 +50,13 @@ const updateValue = () => {
 
 watch(
   () => props.attrObj,
-  (newVal, oldVal) => {
+  (newVal: any, oldVal) => {
     modelValue.value = newVal.value;
   },
   { deep: true }
 );
 onMounted(() => {
-  modelValue.value = props.attrObj.value ? props.attrObj.value : "";
+  modelValue.value = props.attrObj?.value ? props.attrObj.value : "";
 });
 </script>
 
