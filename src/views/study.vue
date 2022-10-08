@@ -19,6 +19,28 @@ const searchFun: searchFun = (source) => {
     return false;
   }
 };
+
+let goods = ["1", "2", "", "4", "", "", "7", "8"];
+const eachGoogs = () => {
+  const promise = [...goods.map((good, i) => getAll(good))];
+  Promise.all(promise).then((newVal) => {
+    console.log(newVal);
+  });
+};
+const getAll = (good: any) => {
+  return new Promise((resolve, reject) => {
+    console.log(new Date(), good);
+    if (good == "") {
+      setTimeout(() => {
+        // 模拟下接口请求
+        resolve("为空");
+      }, 500);
+    } else {
+      resolve(good);
+    }
+  });
+};
+eachGoogs();
 </script>
 
 <style lang="scss" scoped></style>
