@@ -219,6 +219,44 @@ onMounted(async () => {
   console.log(getTree(treeList));
 
   // new Proxy()
+  let request1 = () => {
+    return new Promise<any>((resolve, reject) => {
+      setTimeout(() => {
+        resolve(1);
+      }, 2000);
+    });
+  };
+  let request2 = () => {
+    return new Promise<any>((resolve, reject) => {
+      setTimeout(() => {
+        resolve(2);
+      }, 2000);
+    });
+  };
+
+  let request3 = () => {
+    return new Promise<any>((resolve, reject) => {
+      setTimeout(() => {
+        resolve(3);
+      }, 3000);
+    });
+  };
+
+  let request4 = () => {
+    return new Promise<any>((resolve, reject) => {
+      setTimeout(() => {
+        resolve(4);
+      }, 3000);
+    });
+  };
+  
+  let requestAll = async () =>{
+       await request1()
+       await Promise.all([request2,request3]) 
+       let result = await request4()
+       console.log('result',result)     
+  }
+  requestAll()
 });
 </script>
 
