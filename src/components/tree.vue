@@ -13,12 +13,9 @@
         <el-button type="text" size="small" @click="operFun('edit', item)"
           >编辑</el-button
         >
-        <el-button
-          type="text"
-          size="small"
-          @click="operFun('disable', item)"
-          >{{ item.disabled ? "启用" : "禁用" }}</el-button
-        >
+        <el-button type="text" size="small" @click="operFun('disable', item)">{{
+          item.disabled ? "启用" : "禁用"
+        }}</el-button>
         <el-button type="text" size="small" @click="operFun('delete', item)"
           >删除</el-button
         >
@@ -60,6 +57,17 @@ const handleMenu = inject("handleMenu");
 const operFun = (type, dataItem) => {
   handleMenu({ type, dataItem }); // 处理方法
 };
+
+// 递归查找树节点的id
+const searchItemId = (list, id) => {
+  list.forEach((item) => {
+    if (item.id == id) {
+    }
+    if (item.nextLevel && item.nextLevel.length > 0) {
+      searchItemId(item.nextLevel, id);
+    }
+  });
+};
 </script>
 
 <style lang="scss" scoped>
@@ -74,7 +82,7 @@ const operFun = (type, dataItem) => {
   &.left_p {
     padding-left: 14px;
   }
-  &:hover{
+  &:hover {
     background: #eee;
   }
 }
@@ -92,7 +100,7 @@ const operFun = (type, dataItem) => {
   padding: 7px 10px !important;
 }
 
-::v-deep .el-icon{
+::v-deep .el-icon {
   padding-right: 4px;
 }
 </style>
